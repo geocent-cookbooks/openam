@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# uncomment connector to port 8009 in /etc/tomcat6/server.xml
+
+sudo a2enmod proxy_ajp
+# add proxypass rules to /etc/apache2/sites-enabled/000-default
+sudo sed -ie "/<\/VirtualHost>/i\<Proxy *>    \n  Allow from *    \n</Proxy>    \nProxyPass / ajp://<%=node['geoserver_demo']['nodeip1']%>:8009/ \nProxyPassReverse / ajp://<%=node['geoserver_demo']['nodeip1']%>:8009/    \n" /etc/apache2/sites-enabled/000-default
+sudo service apache2 restart
